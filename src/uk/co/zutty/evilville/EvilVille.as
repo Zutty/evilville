@@ -1,4 +1,4 @@
-package
+package uk.co.zutty.evilville
 {
 	import flash.display.Sprite;
 	
@@ -10,8 +10,10 @@ package
 		public function EvilVille() {
 			super(640, 480, 60, false);
 			FP.screen.scale = 1;
-			FP.screen.color = 0x000000;
+			FP.screen.color = 0xffffff;
 			//FP.console.enable();
+			
+			FP.world = new GameWorld();
 		}
 	}
 }
