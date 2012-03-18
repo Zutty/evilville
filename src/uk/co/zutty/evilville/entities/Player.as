@@ -8,17 +8,21 @@ package uk.co.zutty.evilville.entities
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
 	
-	public class Player extends Entity {
+	import uk.co.zutty.evilville.util.IPoint;
+	
+	public class Player extends Mob {
 
-		[Embed(source = 'assets/guy.png')]
-		private const GUY_IMAGE:Class;
+		[Embed(source = 'assets/player.png')]
+		private const PLAYER_IMAGE:Class;
 		
 		private const SPEED:Number = 3;
+        
+        private var _move:IPoint;
 
-		public function Player() {
-			var img:Image = new Image(GUY_IMAGE);
-			img.centerOrigin();
-			graphic = img;
+		public function Player(x:Number, y:Number) {
+            super(PLAYER_IMAGE, x, y);
+            
+            _move = new IPoint(0, 0);
 			
 			Input.define("up", Key.UP, Key.W);
 			Input.define("down", Key.DOWN, Key.S);
@@ -32,16 +36,26 @@ package uk.co.zutty.evilville.entities
 			FP.camera.x = x - 320;
 			FP.camera.y = y - 240;
 				
+            _move.x = 0;
+            _move.y = 0;
 			if(Input.check("up")) {
-				y -= SPEED;
+				_move.y = -SPEED;
 			} else if(Input.check("down")) {
-				y += SPEED;
+                _move.y = SPEED;
 			}
 			if(Input.check("left")) {
-				x -= SPEED;
+                _move.x = -SPEED;
 			} else if(Input.check("right")) {
-				x += SPEED;
+                _move.x = SPEED;
 			}
+            
+            if(_move.x == 0 && _move.y == 0) {
+                stand();
+            } else {
+                walk(_move.x, _move.y);
+                x += _move.x;
+                y += _move.y;
+            }
 		}
 	}
 }

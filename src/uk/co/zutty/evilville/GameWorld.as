@@ -26,10 +26,7 @@ package uk.co.zutty.evilville
             var gen:OverworldGenerator = new OverworldGenerator(TILES_IMAGE);
             gen.addLayersTo(this);
 
-			_player = new Player();
-            _player.layer = 100;
-			_player.x = 320;
-			_player.y = 240;
+			_player = new Player(320, 240);
 			add(_player);
             
             add(new Zombie(240, 160));
