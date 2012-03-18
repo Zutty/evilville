@@ -30,6 +30,10 @@ package uk.co.zutty.evilville.levels
 				type = "solid";
 			}
 		}
+        
+        public function fill(tile:uint):void {
+            _tilemap.setRect(0, 0, _tilemap.width, _tilemap.height, tile);
+        }
 		
 		public function get solid():Boolean {
 			return _solid;

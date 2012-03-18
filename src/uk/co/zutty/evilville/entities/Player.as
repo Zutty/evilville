@@ -1,4 +1,4 @@
-package uk.co.zutty.evilville
+package uk.co.zutty.evilville.entities
 {
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
