@@ -31,14 +31,11 @@ package uk.co.zutty.evilville.entities
         }
         
         public override function update():void {
-            super.update();
-            
             switch(_state) {
                 case STATE_WANDER:
-                    if(Math.random() > 0.98) {
-                        _waypoint = new IPoint(x, y);
-                        _waypoint.x = Math.random() * 120;
-                        _waypoint.y = Math.random() * 120;
+                    if(_waypoint == null && Math.random() < 0.02) {
+                        var theta:Number = Math.random() * Math.PI * 2;
+                        _waypoint = IPoint.polarUnitVector(theta).multiply(FP.rand(3) * 48).add(x, y);
                     }
                     break;
                 case STATE_AGGRO:
@@ -55,14 +52,16 @@ package uk.co.zutty.evilville.entities
                     x = _waypoint.x;
                     y = _waypoint.y;
                     _waypoint = null;
-                    stand();
+                    velocity.x = 0;
+                    velocity.y = 0;
                 } else {
                     var move2:Point = VectorMath.unitVector(x, y, _waypoint.x, _waypoint.y);
-                    x += move2.x * SPEED;
-                    y += move2.y * SPEED;
-                    walk(move2.x, move2.y);
+                    velocity.x = Math.round(move2.x * SPEED);
+                    velocity.y = Math.round(move2.y * SPEED);
                 }
             }
+
+            super.update();
         }
     }
 }

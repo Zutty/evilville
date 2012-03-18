@@ -14,6 +14,18 @@ package uk.co.zutty.evilville.util
 		public function hash():String {
 			return "["+x+","+y+"]";
 		}
+        
+        public function add(x:int, y:int):IPoint {
+            this.x += x;
+            this.y += y;
+            return this;
+        }
+        
+        public function multiply(m:int):IPoint {
+            x *= m;
+            y *= m;
+            return this;
+        }
 		
 		public function setTo(x:int, y:int):void {
 			this.x = x;
@@ -53,5 +65,9 @@ package uk.co.zutty.evilville.util
 		public static function distManhattan(a:IPoint, b:IPoint):uint {
 			return Math.abs(b.x - a.x) + Math.abs(b.y - a.y);
 		}
+        
+        public static function polarUnitVector(angle:Number):IPoint {
+            return new IPoint(Math.round(Math.sin(angle)), Math.round(-Math.cos(angle)));
+        }
 	}
 }

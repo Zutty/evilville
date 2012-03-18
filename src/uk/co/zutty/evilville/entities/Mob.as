@@ -16,6 +16,7 @@ package uk.co.zutty.evilville.entities
         private static const FRAME_RATE:Number = 16;
         
         private var _gfx:Spritemap;
+        protected var velocity:IPoint;
         
         public function Mob(img:Class, x:Number=0, y:Number=0) {
             super(x, y);
@@ -34,25 +35,27 @@ package uk.co.zutty.evilville.entities
             _gfx.centerOrigin();
             graphic = _gfx;
             _gfx.play("stand_l");
+            
+            velocity = new IPoint(0, 0);
         }
         
-        protected function walk(x:Number, y:Number):void {
-            if(Math.abs(x) > Math.abs(y)) {
-                if(x < 0) {
+        private function walk():void {
+            if(Math.abs(velocity.x) > Math.abs(velocity.y)) {
+                if(velocity.x < 0) {
                     _gfx.play("walk_l");
                 } else {
                     _gfx.play("walk_r");
                 }
             } else {
-                if(y < 0) {
+                if(velocity.y < 0) {
                     _gfx.play("walk_u");
                 } else {
                     _gfx.play("walk_d");
                 }
             }
         }
-        
-        protected function stand():void {
+                
+        private function stand():void {
             switch(_gfx.currentAnim) {
                 case "walk_l":
                     _gfx.play("stand_l");
@@ -67,6 +70,18 @@ package uk.co.zutty.evilville.entities
                     _gfx.play("stand_u");
                     return;
             }
+        }
+        
+        override public function update():void {
+            if(velocity.x == 0 && velocity.y == 0) {
+                stand();
+            } else {
+                walk();
+                x += velocity.x;
+                y += velocity.y;
+            }
+            
+            super.update();
         }
     }
 }

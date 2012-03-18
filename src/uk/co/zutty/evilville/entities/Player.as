@@ -31,31 +31,23 @@ package uk.co.zutty.evilville.entities
 		}
 		
 		override public function update():void {
-			super.update();
-			
 			FP.camera.x = x - 320;
 			FP.camera.y = y - 240;
 				
-            _move.x = 0;
-            _move.y = 0;
+            velocity.x = 0;
+            velocity.y = 0;
 			if(Input.check("up")) {
-				_move.y = -SPEED;
+                velocity.y = -SPEED;
 			} else if(Input.check("down")) {
-                _move.y = SPEED;
+                velocity.y = SPEED;
 			}
 			if(Input.check("left")) {
-                _move.x = -SPEED;
+                velocity.x = -SPEED;
 			} else if(Input.check("right")) {
-                _move.x = SPEED;
+                velocity.x = SPEED;
 			}
             
-            if(_move.x == 0 && _move.y == 0) {
-                stand();
-            } else {
-                walk(_move.x, _move.y);
-                x += _move.x;
-                y += _move.y;
-            }
+            super.update();
 		}
 	}
 }

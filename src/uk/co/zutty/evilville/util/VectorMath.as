@@ -14,6 +14,10 @@ package uk.co.zutty.evilville.util
             return Math.sqrt(p.x*p.x + p.y*p.y);
         }
 
+        public static function polar(angle:Number, mag:Number):Point {
+            return new Point(Math.sin(angle) * mag, -Math.cos(angle) * mag);
+        }
+
         public static function distance(ax:Number, ay:Number, bx:Number, by:Number):Number {
             var dx:Number = ax - bx;
             var dy:Number = ay - by;
