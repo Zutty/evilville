@@ -1,6 +1,7 @@
 package uk.co.zutty.evilville
 {
 	import net.flashpunk.Entity;
+	import net.flashpunk.FP;
 	import net.flashpunk.Graphic;
 	import net.flashpunk.Mask;
 	import net.flashpunk.graphics.Image;
@@ -15,7 +16,9 @@ package uk.co.zutty.evilville
 		private const SPEED:Number = 3;
 
 		public function Player() {
-			graphic = new Image(GUY_IMAGE);
+			var img:Image = new Image(GUY_IMAGE);
+			img.centerOrigin();
+			graphic = img;
 			
 			Input.define("up", Key.UP, Key.W);
 			Input.define("down", Key.DOWN, Key.S);
@@ -26,6 +29,9 @@ package uk.co.zutty.evilville
 		override public function update():void {
 			super.update();
 			
+			FP.camera.x = x - 320;
+			FP.camera.y = y - 240;
+				
 			if(Input.check("up")) {
 				y -= SPEED;
 			} else if(Input.check("down")) {

@@ -35,9 +35,12 @@ package uk.co.zutty.evilville.levels
 			return _solid;
 		}
 		
-		public function setTile(x:uint, y:uint, tx:uint, ty:uint):void {
-			var idx:uint = _tilemap.getIndex(tx, ty);
-			_tilemap.setTile(x, y, idx);
+		public function tileAt(x:uint, y:uint):uint {
+			return _tilemap.getTile(x, y);
+		}
+		
+		public function setTile(x:uint, y:uint, tidx:uint):void {
+			_tilemap.setTile(x, y, tidx);
 
 			if(_solid) {
 				_grid.setTile(x, y);
