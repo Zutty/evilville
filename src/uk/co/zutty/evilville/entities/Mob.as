@@ -8,11 +8,12 @@ package uk.co.zutty.evilville.entities
     import net.flashpunk.Mask;
     import net.flashpunk.graphics.Spritemap;
     
+    import uk.co.zutty.evilville.supplier.Suppliable;
     import uk.co.zutty.evilville.util.IPoint;
     import uk.co.zutty.evilville.util.IRect;
     import uk.co.zutty.evilville.util.VectorMath;
     
-    public class Mob extends Entity {
+    public class Mob extends Suppliable {
         
         private static const FRAME_RATE:Number = 16;
         
@@ -83,22 +84,11 @@ package uk.co.zutty.evilville.entities
             _gfx.play(anim);
         }
         
-        public function spawn(x:Number, y:Number):void {
-            this.x = x;
-            this.y = y;
-            active = true;
-            collidable = true;
-            visible = true;
+        override public function spawn(x:Number, y:Number):void {
+            super.spawn(x, y);
             _health = _maxHealth;
             _facing.set(0, 1);
             velocity.set(0, 0);
-        }
-        
-
-        public function despawn():void {
-            active = false;
-            collidable = false;
-            visible = false;
         }
 
         public function hit(dmg:Number):void {

@@ -38,8 +38,8 @@ package uk.co.zutty.evilville.entities
 			FP.camera.x = x - 320;
 			FP.camera.y = y - 240;
 				
-            velocity.x = 0;
-            velocity.y = 0;
+            velocity.set(0, 0);
+            
 			if(Input.check("up")) {
                 velocity.y = -SPEED;
 			} else if(Input.check("down")) {
