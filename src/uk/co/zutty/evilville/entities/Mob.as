@@ -19,14 +19,20 @@ package uk.co.zutty.evilville.entities
         private var _gfx:Spritemap;
         private var _hurtTick:uint = 0;
         protected var velocity:IPoint;
-        public var facing:IPoint;
+
+        private var _facing:IPoint;
+        private var _health:Number;
+        private var _maxHealth:Number;
         
-        public function Mob(img:Class, x:Number=0, y:Number=0) {
-            super(x, y);
+        public function Mob(img:Class, maxHealth:Number) {
+            super();
             
+            _maxHealth = maxHealth;
+            velocity = new IPoint(0, 0);
+            _facing = new IPoint(0, 1);
+
             type = "mob";
             collidable = true;
-            facing = new IPoint(0, 1);
             setHitbox(32, 48, -16, -24);
 
             _gfx = new Spritemap(img, 48, 48);
@@ -42,20 +48,32 @@ package uk.co.zutty.evilville.entities
             graphic = _gfx;
             _gfx.play("stand_l");
             
-            velocity = new IPoint(0, 0);
+            despawn();
         }
         
+        public function get facing():IPoint {
+            return _facing;
+        }
+        
+        public function get health():Number {
+            return _health;
+        }
+
+        public function get maxHealth():Number {
+            return _maxHealth;
+        }
+
         private function setAnim(moving:Boolean):void {
             var anim:String = moving ? "walk" : "stand";
             
-            if(Math.abs(facing.x) > Math.abs(facing.y)) {
-                if(facing.x < 0) {
+            if(Math.abs(_facing.x) > Math.abs(_facing.y)) {
+                if(_facing.x < 0) {
                     anim += "_l";
                 } else {
                     anim += "_r";
                 }
             } else {
-                if(facing.y < 0) {
+                if(_facing.y < 0) {
                     anim += "_u";
                 } else {
                     anim += "_d";
@@ -65,15 +83,39 @@ package uk.co.zutty.evilville.entities
             _gfx.play(anim);
         }
         
-        public function hit():void {
+        public function spawn(x:Number, y:Number):void {
+            this.x = x;
+            this.y = y;
+            active = true;
+            collidable = true;
+            visible = true;
+            _health = _maxHealth;
+            _facing.set(0, 1);
+            velocity.set(0, 0);
+        }
+        
+
+        public function despawn():void {
+            active = false;
+            collidable = false;
+            visible = false;
+        }
+
+        public function hit(dmg:Number):void {
             _gfx.color = 0xFF0000;
             _hurtTick = 4;
+            
+            _health -= dmg;
+            if(_health <= 0) {
+                _health = 0;
+                despawn();
+            }
         }
         
         override public function update():void {
             var moving:Boolean = velocity.x != 0 || velocity.y != 0;
             if(moving) {
-                facing.setTo(velocity).normalise();
+                _facing.setTo(velocity).normalise();
             }
             setAnim(moving);
             

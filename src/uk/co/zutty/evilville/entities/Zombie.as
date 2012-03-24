@@ -19,16 +19,21 @@ package uk.co.zutty.evilville.entities
         private const STATE_IDLE:uint = 0;
         private const STATE_WANDER:uint = 1;
         private const STATE_AGGRO:uint = 2;
+        
         private const SPEED:Number = 1;
+        private const HEALTH:Number = 8;
         
         private var _waypoint:IPoint;
         private var _state:uint;
 
-        public function Zombie(x:Number=0, y:Number=0) {
-            super(ZOMBIE_IMAGE, x, y);
-
-            _state = STATE_WANDER;
+        public function Zombie() {
+            super(ZOMBIE_IMAGE, HEALTH);
         }
+        
+        override public function spawn(x:Number, y:Number):void {
+            super.spawn(x, y);
+            _state = STATE_WANDER;
+        } 
         
         public override function update():void {
             switch(_state) {

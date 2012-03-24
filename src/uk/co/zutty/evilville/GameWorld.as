@@ -26,10 +26,17 @@ package uk.co.zutty.evilville
             var gen:OverworldGenerator = new OverworldGenerator(TILES_IMAGE, 48, 48);
             gen.addTo(this);
 
-			_player = new Player(320, 240);
+			_player = new Player();
+            _player.spawn(320, 240);
 			add(_player);
             
-            add(new Zombie(240, 160));
+            spawnZombie();
+        }
+        
+        private function spawnZombie():void {
+            var z:Zombie = new Zombie();
+            z.spawn(FP.rand(640), FP.rand(480));
+            add(z);
         }
 	}
 }

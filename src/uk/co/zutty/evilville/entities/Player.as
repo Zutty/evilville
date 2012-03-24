@@ -17,11 +17,12 @@ package uk.co.zutty.evilville.entities
 		
 		private const SPEED:Number = 3;
         private const REACH:Number = 12;
+        private const HEALTH:Number = 10;
         
         private var _move:IPoint;
 
-		public function Player(x:Number, y:Number) {
-            super(PLAYER_IMAGE, x, y);
+		public function Player() {
+            super(PLAYER_IMAGE, HEALTH);
             
             type = "player";
             _move = new IPoint(0, 0);
@@ -50,10 +51,10 @@ package uk.co.zutty.evilville.entities
                 velocity.x = SPEED;
 			}
             
-            if(Input.check("attack")) {
+            if(Input.pressed("attack")) {
                 var mob:Mob = collide("mob", x + (facing.x * REACH), y + (facing.y * REACH)) as Mob;
                 if(mob) {
-                    mob.hit();
+                    mob.hit(2);
                 }
             }
             
