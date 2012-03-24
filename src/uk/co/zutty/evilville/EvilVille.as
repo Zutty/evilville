@@ -5,7 +5,11 @@ package uk.co.zutty.evilville
 	import net.flashpunk.Engine;
 	import net.flashpunk.FP;
 	
+	import uk.co.zutty.evilville.util.IPoint;
+	
 	public class EvilVille extends Engine {
+        
+        public static const POINT:IPoint = new IPoint(0, 0);
 		
 		public function EvilVille() {
 			super(640, 480, 60, false);

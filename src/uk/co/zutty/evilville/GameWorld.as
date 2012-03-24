@@ -20,12 +20,16 @@ package uk.co.zutty.evilville
         private static const TILE_SIZE:Number = 48;
 
         private var _player:Player;
-        private var _zombies:Supplier = Supplier.newSupplier(16, function():Suppliable {
-            return new Zombie();
-        });
+        private var _zombies:Supplier;
 		
 		public function GameWorld() {
 			super();
+            
+            _zombies = Supplier.newSupplier(16, function():Suppliable {
+                var z:Zombie = new Zombie();
+                z.target = _player;
+                return z;
+            });
 
 			//var gen:LevelGenerator = new LevelGenerator();
 			//add(gen.layer);

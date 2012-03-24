@@ -19,13 +19,10 @@ package uk.co.zutty.evilville.entities
         private const REACH:Number = 12;
         private const HEALTH:Number = 10;
         
-        private var _move:IPoint;
-
 		public function Player() {
             super(PLAYER_IMAGE, HEALTH);
             
             type = "player";
-            _move = new IPoint(0, 0);
 			
 			Input.define("up", Key.UP, Key.W);
 			Input.define("down", Key.DOWN, Key.S);
@@ -38,17 +35,17 @@ package uk.co.zutty.evilville.entities
 			FP.camera.x = x - 320;
 			FP.camera.y = y - 240;
 				
-            velocity.set(0, 0);
+            move.zero();
             
 			if(Input.check("up")) {
-                velocity.y = -SPEED;
+                move.y = -SPEED;
 			} else if(Input.check("down")) {
-                velocity.y = SPEED;
+                move.y = SPEED;
 			}
 			if(Input.check("left")) {
-                velocity.x = -SPEED;
+                move.x = -SPEED;
 			} else if(Input.check("right")) {
-                velocity.x = SPEED;
+                move.x = SPEED;
 			}
             
             if(Input.pressed("attack")) {

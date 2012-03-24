@@ -28,6 +28,10 @@ package uk.co.zutty.evilville.util
             y *= m;
             return this;
         }
+        
+        public function zero():IPoint {
+            return set(0, 0);
+        }
 		
 		public function set(x:int, y:int):IPoint {
 			this.x = x;

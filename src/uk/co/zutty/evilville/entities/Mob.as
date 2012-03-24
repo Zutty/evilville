@@ -19,7 +19,7 @@ package uk.co.zutty.evilville.entities
         
         private var _gfx:Spritemap;
         private var _hurtTick:uint = 0;
-        protected var velocity:IPoint;
+        private var _move:IPoint;
 
         private var _facing:IPoint;
         private var _health:Number;
@@ -29,7 +29,7 @@ package uk.co.zutty.evilville.entities
             super();
             
             _maxHealth = maxHealth;
-            velocity = new IPoint(0, 0);
+            _move = new IPoint(0, 0);
             _facing = new IPoint(0, 1);
 
             type = "mob";
@@ -50,6 +50,26 @@ package uk.co.zutty.evilville.entities
             _gfx.play("stand_l");
             
             despawn();
+        }
+        
+        public function get move():IPoint {
+            return _move;
+        }
+        
+        public function get moving():Boolean {
+            return _move.x != 0 || _move.y != 0;
+        }
+        
+        public function setMovement(p:IPoint, speed:Number):void {
+            var dist:Number = VectorMath.distance(p.x, p.y, x, y);
+            
+            if(dist <= speed) {
+                x = p.x;
+                y = p.y;
+                move.zero();
+            } else {
+                move.set(p.x - x, p.y - y).normalise().multiply(speed);
+            }
         }
         
         public function get facing():IPoint {
@@ -88,7 +108,7 @@ package uk.co.zutty.evilville.entities
             super.spawn(x, y);
             _health = _maxHealth;
             _facing.set(0, 1);
-            velocity.set(0, 0);
+            _move.set(0, 0);
         }
 
         public function hit(dmg:Number):void {
@@ -103,15 +123,17 @@ package uk.co.zutty.evilville.entities
         }
         
         override public function update():void {
-            var moving:Boolean = velocity.x != 0 || velocity.y != 0;
+            // Set facing and animation
             if(moving) {
-                _facing.setTo(velocity).normalise();
+                _facing.setTo(_move).normalise();
             }
             setAnim(moving);
             
-            x += velocity.x;
-            y += velocity.y;
+            // Actually move
+            x += _move.x;
+            y += _move.y;
             
+            // Update hurt animation
             if(_hurtTick > 0) {
                 --_hurtTick;
                 if(_hurtTick == 0) {
@@ -119,6 +141,7 @@ package uk.co.zutty.evilville.entities
                 }
             }
 
+            // Set depth
             layer = -y - 24;
 
             super.update();
