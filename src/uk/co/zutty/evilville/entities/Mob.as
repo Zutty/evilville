@@ -21,8 +21,6 @@ package uk.co.zutty.evilville.entities
         public function Mob(img:Class, x:Number=0, y:Number=0) {
             super(x, y);
             
-            layer = 100;
-            
             _gfx = new Spritemap(img, 48, 48);
             _gfx.add("stand_l", [0], FRAME_RATE, false);
             _gfx.add("stand_r", [5], FRAME_RATE, false);
@@ -80,7 +78,9 @@ package uk.co.zutty.evilville.entities
                 x += velocity.x;
                 y += velocity.y;
             }
-            
+
+            layer = -y - 24;
+
             super.update();
         }
     }

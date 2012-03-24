@@ -23,8 +23,8 @@ package uk.co.zutty.evilville
 			//var gen:LevelGenerator = new LevelGenerator();
 			//add(gen.layer);
             
-            var gen:OverworldGenerator = new OverworldGenerator(TILES_IMAGE);
-            gen.addLayersTo(this);
+            var gen:OverworldGenerator = new OverworldGenerator(TILES_IMAGE, 48, 48);
+            gen.addTo(this);
 
 			_player = new Player(320, 240);
 			add(_player);
