@@ -34,7 +34,7 @@ package uk.co.zutty.evilville.entities
 
             type = "mob";
             collidable = true;
-            setHitbox(32, 48, -16, -24);
+            setHitbox(24, 32, -16, -24);
 
             _gfx = new Spritemap(img, 48, 48);
             _gfx.add("stand_l", [0], FRAME_RATE, false);
@@ -130,8 +130,11 @@ package uk.co.zutty.evilville.entities
             setAnim(moving);
             
             // Actually move
-            x += _move.x;
-            y += _move.y;
+            var c:Entity = collide("mob", x + move.x, y + move.y);
+            if(!c) {
+                x += _move.x;
+                y += _move.y;
+            }
             
             // Update hurt animation
             if(_hurtTick > 0) {

@@ -22,7 +22,7 @@ package uk.co.zutty.evilville.entities
 		public function Player() {
             super(PLAYER_IMAGE, HEALTH);
             
-            type = "player";
+            type = "mob";
 			
 			Input.define("up", Key.UP, Key.W);
 			Input.define("down", Key.DOWN, Key.S);
