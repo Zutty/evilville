@@ -1,5 +1,7 @@
 package uk.co.zutty.evilville.util
 {
+    import flash.geom.Point;
+
 	public class IPoint {
 		
 		public static const p:IPoint = new IPoint(0, 0);
@@ -8,7 +10,7 @@ package uk.co.zutty.evilville.util
 		public var y:int;
 		
 		public function IPoint(x:int, y:int) {
-			setTo(x, y);
+			set(x, y);
 		}
 		
 		public function hash():String {
@@ -27,16 +29,34 @@ package uk.co.zutty.evilville.util
             return this;
         }
 		
-		public function setTo(x:int, y:int):void {
+		public function set(x:int, y:int):IPoint {
 			this.x = x;
 			this.y = y;
+            return this;
 		}
+        
+        public function setTo(p:IPoint):IPoint {
+            x = p.x;
+            y = p.y;
+            return this;
+        }
+
+        public function magnitude():int {
+            return Math.round(Math.sqrt(x*x + y*y));
+        }
+            
+        public function normalise():IPoint {
+            var mag:Number = Math.sqrt(x*x + y*y);
+            x = Math.round(Number(x) / mag);
+            y = Math.round(Number(y) / mag);
+            return this;
+        }
 		
-		public function distFrom(p:IPoint):int {
+		public function distTo(p:IPoint):int {
 			return dist(this, p);
 		}
 		
-		public function distFromManhattan(p:IPoint):int {
+		public function distManhattanTo(p:IPoint):int {
 			return distManhattan(this, p);
 		}
 		
@@ -52,7 +72,7 @@ package uk.co.zutty.evilville.util
 			if(point == null) {
 				point = p;
 			}
-			point.setTo(x, y);
+			point.set(x, y);
 			return point;
 		}
 		

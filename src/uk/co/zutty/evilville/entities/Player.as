@@ -16,18 +16,21 @@ package uk.co.zutty.evilville.entities
 		private const PLAYER_IMAGE:Class;
 		
 		private const SPEED:Number = 3;
+        private const REACH:Number = 12;
         
         private var _move:IPoint;
 
 		public function Player(x:Number, y:Number) {
             super(PLAYER_IMAGE, x, y);
             
+            type = "player";
             _move = new IPoint(0, 0);
 			
 			Input.define("up", Key.UP, Key.W);
 			Input.define("down", Key.DOWN, Key.S);
 			Input.define("left", Key.LEFT, Key.A);
 			Input.define("right", Key.RIGHT, Key.D);
+            Input.define("attack", Key.X);
 		}
 		
 		override public function update():void {
@@ -46,6 +49,13 @@ package uk.co.zutty.evilville.entities
 			} else if(Input.check("right")) {
                 velocity.x = SPEED;
 			}
+            
+            if(Input.check("attack")) {
+                var mob:Mob = collide("mob", x + (facing.x * REACH), y + (facing.y * REACH)) as Mob;
+                if(mob) {
+                    mob.hit();
+                }
+            }
             
             super.update();
 		}

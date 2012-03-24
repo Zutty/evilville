@@ -9,6 +9,7 @@ package uk.co.zutty.evilville.entities
     import net.flashpunk.graphics.Spritemap;
     
     import uk.co.zutty.evilville.util.IPoint;
+    import uk.co.zutty.evilville.util.IRect;
     import uk.co.zutty.evilville.util.VectorMath;
     
     public class Mob extends Entity {
@@ -16,11 +17,18 @@ package uk.co.zutty.evilville.entities
         private static const FRAME_RATE:Number = 16;
         
         private var _gfx:Spritemap;
+        private var _hurtTick:uint = 0;
         protected var velocity:IPoint;
+        public var facing:IPoint;
         
         public function Mob(img:Class, x:Number=0, y:Number=0) {
             super(x, y);
             
+            type = "mob";
+            collidable = true;
+            facing = new IPoint(0, 1);
+            setHitbox(32, 48, -16, -24);
+
             _gfx = new Spritemap(img, 48, 48);
             _gfx.add("stand_l", [0], FRAME_RATE, false);
             _gfx.add("stand_r", [5], FRAME_RATE, false);
@@ -37,46 +45,46 @@ package uk.co.zutty.evilville.entities
             velocity = new IPoint(0, 0);
         }
         
-        private function walk():void {
-            if(Math.abs(velocity.x) > Math.abs(velocity.y)) {
-                if(velocity.x < 0) {
-                    _gfx.play("walk_l");
+        private function setAnim(moving:Boolean):void {
+            var anim:String = moving ? "walk" : "stand";
+            
+            if(Math.abs(facing.x) > Math.abs(facing.y)) {
+                if(facing.x < 0) {
+                    anim += "_l";
                 } else {
-                    _gfx.play("walk_r");
+                    anim += "_r";
                 }
             } else {
-                if(velocity.y < 0) {
-                    _gfx.play("walk_u");
+                if(facing.y < 0) {
+                    anim += "_u";
                 } else {
-                    _gfx.play("walk_d");
+                    anim += "_d";
                 }
             }
+            
+            _gfx.play(anim);
         }
-                
-        private function stand():void {
-            switch(_gfx.currentAnim) {
-                case "walk_l":
-                    _gfx.play("stand_l");
-                    return;
-                case "walk_r":
-                    _gfx.play("stand_r");
-                    return;
-                case "walk_d":
-                    _gfx.play("stand_d");
-                    return;
-                case "walk_u":
-                    _gfx.play("stand_u");
-                    return;
-            }
+        
+        public function hit():void {
+            _gfx.color = 0xFF0000;
+            _hurtTick = 4;
         }
         
         override public function update():void {
-            if(velocity.x == 0 && velocity.y == 0) {
-                stand();
-            } else {
-                walk();
-                x += velocity.x;
-                y += velocity.y;
+            var moving:Boolean = velocity.x != 0 || velocity.y != 0;
+            if(moving) {
+                facing.setTo(velocity).normalise();
+            }
+            setAnim(moving);
+            
+            x += velocity.x;
+            y += velocity.y;
+            
+            if(_hurtTick > 0) {
+                --_hurtTick;
+                if(_hurtTick == 0) {
+                    _gfx.color = 0xFFFFFF;
+                }
             }
 
             layer = -y - 24;
