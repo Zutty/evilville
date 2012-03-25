@@ -17,6 +17,7 @@ package uk.co.zutty.evilville.entities
 
         [Embed(source = 'assets/zombie.png')]
         private static const ZOMBIE_IMAGE:Class;
+        private static const ATTACK_FRAME_RATE:Number = 8;
         
         private const STATE_SPAWN:uint = 0;
         private const STATE_IDLE:uint = 1;
@@ -42,22 +43,22 @@ package uk.co.zutty.evilville.entities
             
             gfx.add("stand_l", [10], FRAME_RATE, false);
             gfx.add("walk_l", [11,12,13,14], FRAME_RATE, true);
-            gfx.add("attack_l", [15,10], FRAME_RATE, true);
+            gfx.add("attack_l", [15,10], ATTACK_FRAME_RATE, true);
             gfx.add("die_l", [16,17,18,19], FRAME_RATE, false);
 
             gfx.add("stand_r", [20], FRAME_RATE, false);
             gfx.add("walk_r", [21,22,23,24], FRAME_RATE, true);
-            gfx.add("attack_r", [25,20], FRAME_RATE, true);
+            gfx.add("attack_r", [25,20], ATTACK_FRAME_RATE, true);
             gfx.add("die_r", [26,27,28,29], FRAME_RATE, false);
 
             gfx.add("stand_d", [30], FRAME_RATE, false);
             gfx.add("walk_d", [31,32,33,34], FRAME_RATE, true);
-            gfx.add("attack_d", [35,30], FRAME_RATE, true);
+            gfx.add("attack_d", [35,30], ATTACK_FRAME_RATE, true);
             gfx.add("die_d", [36,37,38,39], FRAME_RATE, false);
 
             gfx.add("stand_u", [40], FRAME_RATE, false);
             gfx.add("walk_u", [41,42,43,44], FRAME_RATE, true);
-            gfx.add("attack_u", [45,40], FRAME_RATE, true);
+            gfx.add("attack_u", [45,40], ATTACK_FRAME_RATE, true);
             gfx.add("die_u", [46,47,48,49], FRAME_RATE, false);
         }
         

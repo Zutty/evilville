@@ -42,6 +42,7 @@ package uk.co.zutty.evilville.entities
 		}
         
         override protected function die():void {
+            super.die();
             if(EvilVille.world) {
                 EvilVille.world.showDeadMsg();
             }
