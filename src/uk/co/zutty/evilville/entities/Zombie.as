@@ -9,6 +9,7 @@ package uk.co.zutty.evilville.entities
     import net.flashpunk.graphics.Spritemap;
     
     import uk.co.zutty.evilville.EvilVille;
+    import uk.co.zutty.evilville.GameWorld;
     import uk.co.zutty.evilville.util.IPoint;
     import uk.co.zutty.evilville.util.VectorMath;
     
@@ -23,6 +24,7 @@ package uk.co.zutty.evilville.entities
         
         private const SPEED:Number = 1;
         private const HEALTH:Number = 8;
+        private const AGGRO_RANGE:Number = 200;
         
         private var _waypoint:IPoint;
         private var _target:Mob;
@@ -46,15 +48,17 @@ package uk.co.zutty.evilville.entities
         
         override public function spawn(x:Number, y:Number):void {
             super.spawn(x, y);
-            _state = STATE_AGGRO;//WANDER;
+            _state = STATE_WANDER;
         } 
         
         public override function update():void {
             switch(_state) {
                 case STATE_WANDER:
+                    checkAggro();
                     updateWander();
                     break;
                 case STATE_AGGRO:
+                    checkAggro();
                     updateAggro();
                     break;
             }
@@ -79,13 +83,27 @@ package uk.co.zutty.evilville.entities
             }
         }
         
-        private function updateAggro():void {
-            // Check target
-            if(_target == null || !_target.active) {
+        private function checkAggro():void {
+            // Transition into aggro
+            if(_state != STATE_AGGRO) {
+                if(FP.world is GameWorld) {
+                    var gw:GameWorld = FP.world as GameWorld;
+                    if(distanceFrom(gw.player) <= AGGRO_RANGE) {
+                        _state = STATE_AGGRO;
+                        _target = gw.player;
+                    }
+                }
+            }
+
+            // Transisiotn out of aggro
+            if(_state == STATE_AGGRO && (_target == null || !_target.active || distanceFrom(_target) > AGGRO_RANGE)) {
                 _state = STATE_WANDER;
+                _target = null;
                 return;
             }
+        }
             
+        private function updateAggro():void {
             // Move towards target
             if(_target != null) {
                 setMovement(EvilVille.POINT.set(_target.x, _target.y), SPEED);
