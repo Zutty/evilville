@@ -25,10 +25,13 @@ package uk.co.zutty.evilville.entities
         private const SPEED:Number = 1;
         private const HEALTH:Number = 8;
         private const AGGRO_RANGE:Number = 200;
+        private const ATTACK_RANGE:Number = 40;
+        private const ATTACK_COOLDOWN:uint = 20;
         
         private var _waypoint:IPoint;
         private var _target:Mob;
         private var _state:uint;
+        private var _attackTick:uint = 0;
 
         public function Zombie() {
             super(ZOMBIE_IMAGE, HEALTH);
@@ -52,6 +55,10 @@ package uk.co.zutty.evilville.entities
         } 
         
         public override function update():void {
+            if(_attackTick > 0) {
+                --_attackTick;
+            }
+            
             switch(_state) {
                 case STATE_WANDER:
                     checkAggro();
@@ -107,6 +114,12 @@ package uk.co.zutty.evilville.entities
             // Move towards target
             if(_target != null) {
                 setMovement(EvilVille.POINT.set(_target.x, _target.y), SPEED);
+                
+                // Attack if in range
+                if(distanceFrom(_target) <= ATTACK_RANGE && _attackTick == 0) {
+                    _target.hit(1);
+                    _attackTick = ATTACK_COOLDOWN;
+                }
             }
         }
     }
