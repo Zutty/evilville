@@ -38,7 +38,7 @@ package uk.co.zutty.evilville.levels
             _groundLayer.fill(1);
             
             makeTallGrass();
-            makeTree(4,4);
+            makeTrees();
             makeGrave(9,8);
             makeGrave(10,8);
             makeGrave(11,8);
@@ -68,9 +68,16 @@ package uk.co.zutty.evilville.levels
             }
         }
         
+        public function makeTrees():void {
+            for(var i:int = 0; i < 4; i++) {
+                makeTree(FP.rand(13), FP.rand(10));
+            }
+        }
+        
         private static const TREE1:IRect = new IRect(0, 1, 3, 3);
+        private static const TREE2:IRect = new IRect(3, 1, 3, 3);
         public function makeTree(x:int, y:int):void {
-            makeTerrain(x-1, y-2, TREE1);
+            makeTerrain(x-1, y-2, FP.choose(TREE1, TREE2));
         }
         
         private static const GRAVE_STONE1:IRect = new IRect(0, 5, 1, 1);
