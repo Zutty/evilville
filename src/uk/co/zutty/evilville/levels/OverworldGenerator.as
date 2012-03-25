@@ -6,6 +6,7 @@ package uk.co.zutty.evilville.levels
     import net.flashpunk.World;
     
     import uk.co.zutty.evilville.entities.Terrain;
+    import uk.co.zutty.evilville.util.IPoint;
     import uk.co.zutty.evilville.util.IRect;
 
     public class OverworldGenerator {
@@ -18,6 +19,7 @@ package uk.co.zutty.evilville.levels
         private var _terrain:Vector.<Terrain>;
         private var _tileWidth:Number;
         private var _tileHeight:Number;
+        private var _spawnPoints:Vector.<IPoint>;
         
         public function OverworldGenerator(tilesImg:Class, tileWidth:Number, tileHeight:Number) {
             _tilesImg = tilesImg;
@@ -33,6 +35,8 @@ package uk.co.zutty.evilville.levels
             _solidLayer.layer = 0;
             _frontLayer = new Layer(tilesImg, 640, 480, tileWidth, tileHeight);
             _frontLayer.layer = -65536;
+
+            _spawnPoints = new Vector.<IPoint>();
             
             // Draw grass
             _groundLayer.fill(1);
@@ -53,6 +57,10 @@ package uk.co.zutty.evilville.levels
             for each(var t:Terrain in _terrain) {
                 world.add(t);
             }
+        }
+        
+        public function get spawnPoints():Vector.<IPoint> {
+            return _spawnPoints;
         }
 
         public function makeTerrain(x:uint, y:uint, tRect:IRect):void {
@@ -92,12 +100,19 @@ package uk.co.zutty.evilville.levels
             if(Math.random() < 0.02) {
                 makeTerrain(x, y, GRAVE_SHOVEL);
             }
+            addSpawnPoint(x, y);
         }
 
         public function makeOpenGrave(x:int, y:int):void {
             makeTerrain(x, y-1, FP.choose(GRAVE_STONE1, GRAVE_STONE2, GRAVE_STONE3));
             _backLayer.setTile(x, y-1, 51);
             _backLayer.setTile(x, y, 59);
+        }
+        
+        private function addSpawnPoint(x:int, y:int):void {
+            var sx:int = (x * _tileWidth) + (_tileWidth / 2);
+            var sy:int = (y * _tileHeight) + (_tileHeight / 2);
+            _spawnPoints[_spawnPoints.length] = new IPoint(sx, sy);
         }
     }
 }

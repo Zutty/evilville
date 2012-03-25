@@ -16,6 +16,7 @@ package uk.co.zutty.evilville
 	import uk.co.zutty.evilville.levels.OverworldGenerator;
 	import uk.co.zutty.evilville.supplier.Suppliable;
 	import uk.co.zutty.evilville.supplier.Supplier;
+	import uk.co.zutty.evilville.util.IPoint;
 	
 	public class GameWorld extends World {
 
@@ -27,6 +28,7 @@ package uk.co.zutty.evilville
         private var _zombies:Supplier = Supplier.newSupplier(16, function():Suppliable {
             return new Zombie();
         });
+        private var _gen:OverworldGenerator;
         
         private var _deadMsg:Entity;
 		
@@ -36,8 +38,8 @@ package uk.co.zutty.evilville
 			//var gen:LevelGenerator = new LevelGenerator();
 			//add(gen.layer);
             
-            var gen:OverworldGenerator = new OverworldGenerator(TILES_IMAGE, 48, 48);
-            gen.addTo(this);
+            _gen = new OverworldGenerator(TILES_IMAGE, 48, 48);
+            _gen.addTo(this);
 
 			_player = new Player();
             _player.spawn(320, 240);
@@ -76,7 +78,8 @@ package uk.co.zutty.evilville
         }
         
         private function spawnZombie():void {
-            _zombies.spawnNext(FP.rand(640), FP.rand(480));
+            var p:IPoint = FP.choose(_gen.spawnPoints);
+            _zombies.spawnNext(p.x, p.y);
         }
         
         override public function update():void {

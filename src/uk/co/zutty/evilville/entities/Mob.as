@@ -34,7 +34,7 @@ package uk.co.zutty.evilville.entities
 
             type = "mob";
             collidable = true;
-            setHitbox(24, 32, -16, -24);
+            setHitbox(32, 32, -16, -16);
 
             _gfx = new Spritemap(img, 48, 48);
             _gfx.add("stand_l", [0], FRAME_RATE, false);
