@@ -18,9 +18,11 @@ package uk.co.zutty.evilville.entities
         [Embed(source = 'assets/zombie.png')]
         private static const ZOMBIE_IMAGE:Class;
         
-        private const STATE_IDLE:uint = 0;
-        private const STATE_WANDER:uint = 1;
-        private const STATE_AGGRO:uint = 2;
+        private const STATE_SPAWN:uint = 0;
+        private const STATE_IDLE:uint = 1;
+        private const STATE_WANDER:uint = 2;
+        private const STATE_AGGRO:uint = 3;
+        private const STATE_DEAD:uint = 4;
         
         private const SPEED:Number = 1;
         private const HEALTH:Number = 8;
@@ -35,6 +37,28 @@ package uk.co.zutty.evilville.entities
 
         public function Zombie() {
             super(ZOMBIE_IMAGE, HEALTH);
+            
+            gfx.add("spawn", [0,1,2,3,4,5,6,7,8,9], FRAME_RATE, false);
+            
+            gfx.add("stand_l", [10], FRAME_RATE, false);
+            gfx.add("walk_l", [11,12,13,14], FRAME_RATE, true);
+            gfx.add("attack_l", [15,10], FRAME_RATE, true);
+            gfx.add("die_l", [16,17,18,19], FRAME_RATE, false);
+
+            gfx.add("stand_r", [20], FRAME_RATE, false);
+            gfx.add("walk_r", [21,22,23,24], FRAME_RATE, true);
+            gfx.add("attack_r", [25,20], FRAME_RATE, true);
+            gfx.add("die_r", [26,27,28,29], FRAME_RATE, false);
+
+            gfx.add("stand_d", [30], FRAME_RATE, false);
+            gfx.add("walk_d", [31,32,33,34], FRAME_RATE, true);
+            gfx.add("attack_d", [35,30], FRAME_RATE, true);
+            gfx.add("die_d", [36,37,38,39], FRAME_RATE, false);
+
+            gfx.add("stand_u", [40], FRAME_RATE, false);
+            gfx.add("walk_u", [41,42,43,44], FRAME_RATE, true);
+            gfx.add("attack_u", [45,40], FRAME_RATE, true);
+            gfx.add("die_u", [46,47,48,49], FRAME_RATE, false);
         }
         
         public function get waypoint():IPoint {
@@ -51,8 +75,23 @@ package uk.co.zutty.evilville.entities
         
         override public function spawn(x:Number, y:Number):void {
             super.spawn(x, y);
-            _state = STATE_WANDER;
+            _state = STATE_SPAWN;
+            gfx.callback = function():void {
+                gfx.play("stand_d");
+                gfx.callback = null;
+                _state = STATE_WANDER;
+            };
+            gfx.play("spawn", true);
         } 
+        
+        override protected function die():void {
+            _state = STATE_DEAD;
+            gfx.callback = function():void {
+                gfx.callback = null;
+                despawn();
+            }
+            gfx.play(facingAnim("die"));
+        }
         
         public override function update():void {
             if(_attackTick > 0) {
@@ -117,6 +156,7 @@ package uk.co.zutty.evilville.entities
                 
                 // Attack if in range
                 if(distanceFrom(_target) <= ATTACK_RANGE && _attackTick == 0) {
+                    gfx.play(facingAnim("attack"));
                     _target.hit(1);
                     _attackTick = ATTACK_COOLDOWN;
                 }

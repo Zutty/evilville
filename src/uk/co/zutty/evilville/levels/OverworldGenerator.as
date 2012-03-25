@@ -111,7 +111,7 @@ package uk.co.zutty.evilville.levels
         
         private function addSpawnPoint(x:int, y:int):void {
             var sx:int = (x * _tileWidth) + (_tileWidth / 2);
-            var sy:int = (y * _tileHeight) + (_tileHeight / 2);
+            var sy:int = (y * _tileHeight) + (_tileHeight / 4);
             _spawnPoints[_spawnPoints.length] = new IPoint(sx, sy);
         }
     }

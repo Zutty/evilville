@@ -8,6 +8,7 @@ package uk.co.zutty.evilville.entities
     import net.flashpunk.Mask;
     import net.flashpunk.graphics.Spritemap;
     
+    import uk.co.zutty.evilville.EvilVille;
     import uk.co.zutty.evilville.supplier.Suppliable;
     import uk.co.zutty.evilville.util.IPoint;
     import uk.co.zutty.evilville.util.IRect;
@@ -15,7 +16,7 @@ package uk.co.zutty.evilville.entities
     
     public class Mob extends Suppliable {
         
-        private static const FRAME_RATE:Number = 16;
+        public static const FRAME_RATE:Number = 16;
         
         private var _gfx:Spritemap;
         private var _hurtTick:uint = 0;
@@ -37,19 +38,14 @@ package uk.co.zutty.evilville.entities
             setHitbox(32, 32, -16, -16);
 
             _gfx = new Spritemap(img, 48, 48);
-            _gfx.add("stand_l", [0], FRAME_RATE, false);
-            _gfx.add("stand_r", [5], FRAME_RATE, false);
-            _gfx.add("stand_d", [10], FRAME_RATE, false);
-            _gfx.add("stand_u", [15], FRAME_RATE, false);
-            _gfx.add("walk_l", [1,2,3,4], FRAME_RATE, true);
-            _gfx.add("walk_r", [6,7,8,9], FRAME_RATE, true);
-            _gfx.add("walk_d", [11,12,13,14], FRAME_RATE, true);
-            _gfx.add("walk_u", [16,17,18,19], FRAME_RATE, true);
             _gfx.centerOrigin();
             graphic = _gfx;
-            _gfx.play("stand_l");
             
             despawn();
+        }
+        
+        protected function get gfx():Spritemap {
+            return _gfx;
         }
         
         public function get move():IPoint {
@@ -85,23 +81,28 @@ package uk.co.zutty.evilville.entities
         }
 
         private function setAnim(moving:Boolean):void {
-            var anim:String = moving ? "walk" : "stand";
+            if(_gfx.currentAnim == "spawn") {
+                return;
+            }
             
+            var anim:String = moving ? "walk" : "stand";
+            _gfx.play(facingAnim(anim));
+        }
+        
+        protected function facingAnim(anim:String):String {
             if(Math.abs(_facing.x) > Math.abs(_facing.y)) {
                 if(_facing.x < 0) {
-                    anim += "_l";
+                    return anim + "_l";
                 } else {
-                    anim += "_r";
+                    return anim + "_r";
                 }
             } else {
                 if(_facing.y < 0) {
-                    anim += "_u";
+                    return anim + "_u";
                 } else {
-                    anim += "_d";
+                    return anim + "_d";
                 }
             }
-            
-            _gfx.play(anim);
         }
         
         override public function spawn(x:Number, y:Number):void {
@@ -120,19 +121,26 @@ package uk.co.zutty.evilville.entities
             _health -= dmg;
             if(_health <= 0) {
                 _health = 0;
-                despawn();
                 die();
             }
         }
-        
-        protected function die():void {}
+
+        /**
+         * Might want to override this, to do something before dying.
+         */
+        protected function die():void {
+            despawn();
+        }
         
         override public function update():void {
             // Set facing and animation
-            if(moving) {
-                _facing.setTo(_move).normalise();
+            EvilVille.POINT.setTo(_move).normalise();
+            if(!_facing.equals(EvilVille.POINT)) {
+                if(moving) {
+                    _facing.setTo(EvilVille.POINT);
+                }
+                setAnim(moving);
             }
-            setAnim(moving);
             
             // Actually move
             var c:Entity = collide("mob", x + move.x, y + move.y);

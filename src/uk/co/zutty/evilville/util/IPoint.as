@@ -17,6 +17,10 @@ package uk.co.zutty.evilville.util
 			return "["+x+","+y+"]";
 		}
         
+        public function equals(p:IPoint):Boolean {
+            return x == p.x && y == p.y;
+        }
+        
         public function add(x:int, y:int):IPoint {
             this.x += x;
             this.y += y;

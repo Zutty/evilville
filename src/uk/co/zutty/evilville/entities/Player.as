@@ -24,6 +24,15 @@ package uk.co.zutty.evilville.entities
             super(PLAYER_IMAGE, HEALTH);
             
             type = "mob";
+            
+            gfx.add("stand_l", [0], FRAME_RATE, false);
+            gfx.add("stand_r", [5], FRAME_RATE, false);
+            gfx.add("stand_d", [10], FRAME_RATE, false);
+            gfx.add("stand_u", [15], FRAME_RATE, false);
+            gfx.add("walk_l", [1,2,3,4], FRAME_RATE, true);
+            gfx.add("walk_r", [6,7,8,9], FRAME_RATE, true);
+            gfx.add("walk_d", [11,12,13,14], FRAME_RATE, true);
+            gfx.add("walk_u", [16,17,18,19], FRAME_RATE, true);
 			
 			Input.define("up", Key.UP, Key.W);
 			Input.define("down", Key.DOWN, Key.S);
