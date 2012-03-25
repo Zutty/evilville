@@ -109,6 +109,8 @@ package uk.co.zutty.evilville.entities
             _health = _maxHealth;
             _facing.set(0, 1);
             _move.set(0, 0);
+            _gfx.color = 0xFFFFFF;
+            _hurtTick = 0;
         }
 
         public function hit(dmg:Number):void {
@@ -119,8 +121,11 @@ package uk.co.zutty.evilville.entities
             if(_health <= 0) {
                 _health = 0;
                 despawn();
+                die();
             }
         }
+        
+        protected function die():void {}
         
         override public function update():void {
             // Set facing and animation

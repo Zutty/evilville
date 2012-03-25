@@ -8,6 +8,7 @@ package uk.co.zutty.evilville.entities
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
 	
+	import uk.co.zutty.evilville.EvilVille;
 	import uk.co.zutty.evilville.util.IPoint;
 	
 	public class Player extends Mob {
@@ -30,6 +31,12 @@ package uk.co.zutty.evilville.entities
 			Input.define("right", Key.RIGHT, Key.D);
             Input.define("attack", Key.X);
 		}
+        
+        override protected function die():void {
+            if(EvilVille.world) {
+                EvilVille.world.showDeadMsg();
+            }
+        }
 		
 		override public function update():void {
 			FP.camera.x = x - 320;
