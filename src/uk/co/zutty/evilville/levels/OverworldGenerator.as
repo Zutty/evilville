@@ -11,6 +11,7 @@ package uk.co.zutty.evilville.levels
     public class OverworldGenerator {
         
         private var _tilesImg:Class;
+        private var _groundLayer:Layer;
         private var _backLayer:Layer;
         private var _solidLayer:Layer;
         private var _frontLayer:Layer;
@@ -24,21 +25,28 @@ package uk.co.zutty.evilville.levels
             _tileHeight = tileHeight;
             _terrain = new Vector.<Terrain>();
             
+            _groundLayer = new Layer(tilesImg, 640, 480, tileWidth, tileHeight);
+            _groundLayer.layer = 65536;
             _backLayer = new Layer(tilesImg, 640, 480, tileWidth, tileHeight);
-            _backLayer.layer = 65536;
+            _backLayer.layer = 32768;
             _solidLayer = new Layer(tilesImg, 640, 480, tileWidth, tileHeight, true);
             _solidLayer.layer = 0;
             _frontLayer = new Layer(tilesImg, 640, 480, tileWidth, tileHeight);
             _frontLayer.layer = -65536;
             
             // Draw grass
-            _backLayer.fill(1);
+            _groundLayer.fill(1);
             
             makeTallGrass();
             makeTree(4,4);
+            makeGrave(9,8);
+            makeGrave(10,8);
+            makeGrave(11,8);
+            makeOpenGrave(12,8);
         }
         
         public function addTo(world:World):void {
+            world.add(_groundLayer);
             world.add(_backLayer);
             world.add(_solidLayer);
             world.add(_frontLayer);
@@ -63,6 +71,26 @@ package uk.co.zutty.evilville.levels
         private static const TREE1:IRect = new IRect(0, 1, 3, 3);
         public function makeTree(x:int, y:int):void {
             makeTerrain(x-1, y-2, TREE1);
+        }
+        
+        private static const GRAVE_STONE1:IRect = new IRect(0, 5, 1, 1);
+        private static const GRAVE_STONE2:IRect = new IRect(1, 5, 1, 1);
+        private static const GRAVE_STONE3:IRect = new IRect(2, 5, 1, 1);
+        private static const GRAVE_SHOVEL:IRect = new IRect(3, 5, 1, 1);
+        public function makeGrave(x:int, y:int):void {
+            makeTerrain(x, y-1, FP.choose(GRAVE_STONE1, GRAVE_STONE2, GRAVE_STONE3));
+            var grnd:int = 48 + FP.rand(2);
+            _backLayer.setTile(x, y-1, grnd);
+            _backLayer.setTile(x, y, grnd + 8);
+            if(Math.random() < 0.02) {
+                makeTerrain(x, y, GRAVE_SHOVEL);
+            }
+        }
+
+        public function makeOpenGrave(x:int, y:int):void {
+            makeTerrain(x, y-1, FP.choose(GRAVE_STONE1, GRAVE_STONE2, GRAVE_STONE3));
+            _backLayer.setTile(x, y-1, 51);
+            _backLayer.setTile(x, y, 59);
         }
     }
 }
