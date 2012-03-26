@@ -80,7 +80,7 @@ package uk.co.zutty.evilville.entities
             return _maxHealth;
         }
 
-        private function setAnim(moving:Boolean):void {
+        protected function setAnim(moving:Boolean):void {
             if(_gfx.currentAnim == "spawn") {
                 return;
             }

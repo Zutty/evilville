@@ -145,6 +145,7 @@ package uk.co.zutty.evilville.entities
             // Transisiotn out of aggro
             if(_state == STATE_AGGRO && (_target == null || !_target.active || distanceFrom(_target) > AGGRO_RANGE)) {
                 _state = STATE_WANDER;
+                setAnim(moving);
                 _target = null;
                 return;
             }
@@ -160,6 +161,9 @@ package uk.co.zutty.evilville.entities
                     gfx.play(facingAnim("attack"));
                     _target.hit(1);
                     _attackTick = ATTACK_COOLDOWN;
+                }
+                if(distanceFrom(_target) > ATTACK_RANGE) {
+                    setAnim(moving);
                 }
             }
         }
