@@ -77,21 +77,14 @@ package uk.co.zutty.evilville.entities
         override public function spawn(x:Number, y:Number):void {
             super.spawn(x, y);
             _state = STATE_SPAWN;
-            gfx.callback = function():void {
-                gfx.play("stand_d");
-                gfx.callback = null;
+            gfx.spawn(function():void {
                 _state = STATE_WANDER;
-            };
-            gfx.play("spawn", true);
+            });
         } 
         
         override protected function die():void {
             _state = STATE_DEAD;
-            gfx.callback = function():void {
-                gfx.callback = null;
-                despawn();
-            }
-            gfx.play(facingAnim("die"));
+            gfx.die(despawn);
         }
         
         public override function update():void {
@@ -145,7 +138,6 @@ package uk.co.zutty.evilville.entities
             // Transisiotn out of aggro
             if(_state == STATE_AGGRO && (_target == null || !_target.active || distanceFrom(_target) > AGGRO_RANGE)) {
                 _state = STATE_WANDER;
-                setAnim(moving);
                 _target = null;
                 return;
             }
@@ -158,12 +150,12 @@ package uk.co.zutty.evilville.entities
                 
                 // Attack if in range
                 if(distanceFrom(_target) <= ATTACK_RANGE && _attackTick == 0) {
-                    gfx.play(facingAnim("attack"));
+                    gfx.attack();
                     _target.hit(1);
                     _attackTick = ATTACK_COOLDOWN;
                 }
                 if(distanceFrom(_target) > ATTACK_RANGE) {
-                    setAnim(moving);
+					resetSprite();
                 }
             }
         }

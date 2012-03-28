@@ -18,9 +18,10 @@ package uk.co.zutty.evilville.entities
         
         public static const FRAME_RATE:Number = 16;
         
-        private var _gfx:Spritemap;
+        private var _gfx:MobSprite;
         private var _hurtTick:uint = 0;
         private var _move:IPoint;
+		private var _oldMove:IPoint;
 
         private var _facing:IPoint;
         private var _health:Number;
@@ -31,20 +32,19 @@ package uk.co.zutty.evilville.entities
             
             _maxHealth = maxHealth;
             _move = new IPoint(0, 0);
+			_oldMove = new IPoint(0, 0);
             _facing = new IPoint(0, 1);
 
             type = "mob";
             collidable = true;
             setHitbox(32, 32, -16, -16);
 
-            _gfx = new Spritemap(img, 48, 48);
+            _gfx = new MobSprite(img, 48, 48);
             _gfx.centerOrigin();
             graphic = _gfx;
-            
-            despawn();
         }
         
-        protected function get gfx():Spritemap {
+        protected function get gfx():MobSprite {
             return _gfx;
         }
         
@@ -80,29 +80,8 @@ package uk.co.zutty.evilville.entities
             return _maxHealth;
         }
 
-        protected function setAnim(moving:Boolean):void {
-            if(_gfx.currentAnim == "spawn") {
-                return;
-            }
-            
-            var anim:String = moving ? "walk" : "stand";
-            _gfx.play(facingAnim(anim));
-        }
-        
-        protected function facingAnim(anim:String):String {
-            if(Math.abs(_facing.x) > Math.abs(_facing.y)) {
-                if(_facing.x < 0) {
-                    return anim + "_l";
-                } else {
-                    return anim + "_r";
-                }
-            } else {
-                if(_facing.y < 0) {
-                    return anim + "_u";
-                } else {
-                    return anim + "_d";
-                }
-            }
+        protected function resetSprite():void {
+            moving ? _gfx.walk() : _gfx.stand();
         }
         
         override public function spawn(x:Number, y:Number):void {
@@ -133,14 +112,26 @@ package uk.co.zutty.evilville.entities
         }
         
         override public function update():void {
-            // Set facing and animation
+			var reset:Boolean = false;
+
+			// Update facing
             EvilVille.POINT.setTo(_move).normalise();
-            if(!_facing.equals(EvilVille.POINT)) {
-                if(moving) {
-                    _facing.setTo(EvilVille.POINT);
-                }
-                setAnim(moving);
+            if(!_facing.equals(EvilVille.POINT) && moving) {
+                _facing.setTo(EvilVille.POINT);
+				_gfx.facingVector = _facing;
+				reset = true;
             }
+
+			// Check if motion has changed
+			if(!_move.equals(_oldMove)) {
+				_oldMove.setTo(_move);
+				reset = true;
+			}
+			
+			// Reset animation if necessary
+			if(reset) {
+				resetSprite();
+			}
             
             // Actually move
             var c:Entity = collide("mob", x + move.x, y + move.y);
