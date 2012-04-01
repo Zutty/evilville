@@ -147,9 +147,13 @@ package uk.co.zutty.evilville.entities
 			}
             
             // Actually move
-            var c:Entity = collideTypes(["mob", "terrain"], x + move.x, y + move.y);
-            if(!c) {
+            var c:Entity;
+            c = collideTypes(["mob", "terrain"], x + move.x, y);
+            if(c == null) {
                 x += _move.x;
+            }
+            c = collideTypes(["mob", "terrain"], x, y + move.y);
+            if(c == null) {
                 y += _move.y;
             }
 
