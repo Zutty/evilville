@@ -37,7 +37,7 @@ package uk.co.zutty.evilville.entities
 
             type = "mob";
             collidable = true;
-            setHitbox(32, 32, -16, -16);
+            setHitbox(32, 32, 16, 16);
 
             _gfx = new MobSprite(img, 48, 48);
             _gfx.centerOrigin();
@@ -134,7 +134,7 @@ package uk.co.zutty.evilville.entities
 			}
             
             // Actually move
-            var c:Entity = collide("mob", x + move.x, y + move.y);
+            var c:Entity = collideTypes(["mob", "terrain"], x + move.x, y + move.y);
             if(!c) {
                 x += _move.x;
                 y += _move.y;

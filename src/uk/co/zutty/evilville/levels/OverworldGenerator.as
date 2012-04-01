@@ -63,9 +63,9 @@ package uk.co.zutty.evilville.levels
             return _spawnPoints;
         }
 
-        public function makeTerrain(x:uint, y:uint, tRect:IRect):void {
+        public function makeTerrain(x:uint, y:uint, tRect:IRect, solid:Boolean = false):void {
             var rect:Rectangle = new Rectangle(tRect.x * _tileWidth, tRect.y * _tileHeight, tRect.width * _tileWidth, tRect.height * _tileHeight);
-            _terrain[_terrain.length] = new Terrain(x * 48, y * 48, _tilesImg, rect);            
+            _terrain[_terrain.length] = new Terrain(x * 48, y * 48, _tilesImg, rect, solid);            
         }
 
         private static const GRASS1:IRect = new IRect(2, 0, 1, 1);
@@ -85,7 +85,7 @@ package uk.co.zutty.evilville.levels
         private static const TREE1:IRect = new IRect(0, 1, 3, 3);
         private static const TREE2:IRect = new IRect(3, 1, 3, 3);
         public function makeTree(x:int, y:int):void {
-            makeTerrain(x-1, y-2, FP.choose(TREE1, TREE2));
+            makeTerrain(x-1, y-2, FP.choose(TREE1, TREE2), true);
         }
         
         private static const GRAVE_STONE1:IRect = new IRect(0, 5, 1, 1);

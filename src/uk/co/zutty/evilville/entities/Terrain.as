@@ -4,14 +4,17 @@ package uk.co.zutty.evilville.entities
     
     import net.flashpunk.Entity;
     import net.flashpunk.Graphic;
-    import net.flashpunk.Mask;
     import net.flashpunk.graphics.Image;
     
     public class Terrain extends Entity {
         
-        public function Terrain(x:Number, y:Number, img:Class, rect:Rectangle) {
-            super(x, y, new Image(img, rect), mask);
+        public function Terrain(x:Number, y:Number, img:Class, rect:Rectangle, solid:Boolean = false) {
+            super(x, y, new Image(img, rect));
             layer = -y - rect.height;
+			type = "terrain";
+			if(solid) {
+				setHitbox(48, 6, -((rect.width - 48) / 2), 6 - rect.height);
+			}
         }
     }
 }
