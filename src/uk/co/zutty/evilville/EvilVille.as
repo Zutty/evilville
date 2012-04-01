@@ -19,7 +19,7 @@ package uk.co.zutty.evilville
 			super(640, 480, 60, false);
 			FP.screen.scale = 1;
 			FP.screen.color = 0xffffff;
-			FP.console.enable();
+			//FP.console.enable();
 			
             Text.font = "opencomic";
 

@@ -66,8 +66,11 @@ package uk.co.zutty.evilville.entities
 			}
             
             if(Input.pressed("attack")) {
-                var mob:Mob = collide("mob", x + (facing.x * REACH), y + (facing.y * REACH)) as Mob;
+                var mob:Mob = collideHitbox("mobhurt", x + (facing.x * REACH), y + (facing.y * REACH)) as Mob;
+
+                trace("trying to hit...");
                 if(mob) {
+                    trace("...got something");
                     mob.hit(2);
                 }
             }

@@ -7,6 +7,7 @@ package uk.co.zutty.evilville.entities
     import net.flashpunk.Graphic;
     import net.flashpunk.Mask;
     import net.flashpunk.graphics.Spritemap;
+    import net.flashpunk.masks.Hitbox;
     
     import uk.co.zutty.evilville.EvilVille;
     import uk.co.zutty.evilville.supplier.Suppliable;
@@ -19,6 +20,7 @@ package uk.co.zutty.evilville.entities
         public static const FRAME_RATE:Number = 16;
         
         private var _gfx:MobSprite;
+        private var _hitbox:MobHitbox;
         private var _hurtTick:uint = 0;
         private var _move:IPoint;
 		private var _oldMove:IPoint;
@@ -37,11 +39,22 @@ package uk.co.zutty.evilville.entities
 
             type = "mob";
             collidable = true;
-            setHitbox(32, 32, 16, 16);
+            setHitbox(32, 4, 16, -20);
 
             _gfx = new MobSprite(img, 48, 48);
             _gfx.centerOrigin();
             graphic = _gfx;
+            
+            _hitbox = new MobHitbox(new Hitbox(32, 32, -16, -16), this, "mobhurt");
+        }
+        
+        public function get hitbox():MobHitbox {
+            return _hitbox;
+        }
+        
+        public function collideHitbox(type:String, x:Number, y:Number):Entity {
+            var e:Entity = _hitbox.collide(type, x, y);
+            return (e != null && e is MobHitbox) ? (e as MobHitbox).parent : e;
         }
         
         protected function get gfx():MobSprite {
@@ -111,6 +124,11 @@ package uk.co.zutty.evilville.entities
             despawn();
         }
         
+        protected function shiftHurtbox():void {
+            _hitbox.x = x;
+            _hitbox.y = y;
+        }
+        
         override public function update():void {
 			var reset:Boolean = false;
 
@@ -139,6 +157,8 @@ package uk.co.zutty.evilville.entities
                 x += _move.x;
                 y += _move.y;
             }
+            
+            shiftHurtbox();
             
             // Update hurt animation
             if(_hurtTick > 0) {

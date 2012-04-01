@@ -9,6 +9,8 @@ package uk.co.zutty.evilville
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
 	
+	import uk.co.zutty.evilville.entities.Mob;
+	import uk.co.zutty.evilville.entities.MobHitbox;
 	import uk.co.zutty.evilville.entities.Player;
 	import uk.co.zutty.evilville.entities.Zombie;
 	import uk.co.zutty.evilville.levels.Layer;
@@ -43,7 +45,7 @@ package uk.co.zutty.evilville
 
 			_player = new Player();
             _player.spawn(320, 240);
-			add(_player);
+			addMob(_player);
             
             _zombies.init();
             _zombies.addAll(this);
@@ -67,6 +69,20 @@ package uk.co.zutty.evilville
             _deadMsg.collidable = false;
             _deadMsg.layer = -131072;
             add(_deadMsg);
+        }
+
+        override public function add(e:Entity):Entity {
+            if(e is Mob) {
+                return addMob(e as Mob);
+            } else {
+                return super.add(e);
+            }
+        }
+
+        public function addMob(mob:Mob):Mob {
+            super.add(mob);
+            add(mob.hitbox);
+            return mob;
         }
         
         public function get player():Player {

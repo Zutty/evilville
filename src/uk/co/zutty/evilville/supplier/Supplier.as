@@ -3,6 +3,8 @@ package uk.co.zutty.evilville.supplier
     import net.flashpunk.Entity;
     import net.flashpunk.World;
     
+    import uk.co.zutty.evilville.entities.Mob;
+    
     public class Supplier {
         
         private static const allSuppliers:Vector.<Supplier> = new Vector.<Supplier>();

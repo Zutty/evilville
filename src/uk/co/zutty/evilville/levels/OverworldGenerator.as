@@ -93,7 +93,7 @@ package uk.co.zutty.evilville.levels
         private static const GRAVE_STONE3:IRect = new IRect(2, 5, 1, 1);
         private static const GRAVE_SHOVEL:IRect = new IRect(3, 5, 1, 1);
         public function makeGrave(x:int, y:int):void {
-            makeTerrain(x, y-1, FP.choose(GRAVE_STONE1, GRAVE_STONE2, GRAVE_STONE3));
+            makeTerrain(x, y-1, FP.choose(GRAVE_STONE1, GRAVE_STONE2, GRAVE_STONE3), true);
             var grnd:int = 48 + FP.rand(2);
             _backLayer.setTile(x, y-1, grnd);
             _backLayer.setTile(x, y, grnd + 8);
@@ -104,7 +104,7 @@ package uk.co.zutty.evilville.levels
         }
 
         public function makeOpenGrave(x:int, y:int):void {
-            makeTerrain(x, y-1, FP.choose(GRAVE_STONE1, GRAVE_STONE2, GRAVE_STONE3));
+            makeTerrain(x, y-1, FP.choose(GRAVE_STONE1, GRAVE_STONE2, GRAVE_STONE3), true);
             _backLayer.setTile(x, y-1, 51);
             _backLayer.setTile(x, y, 59);
         }
