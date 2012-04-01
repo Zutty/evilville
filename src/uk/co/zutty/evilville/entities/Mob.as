@@ -124,11 +124,6 @@ package uk.co.zutty.evilville.entities
             despawn();
         }
         
-        protected function shiftHurtbox():void {
-            _hitbox.x = x;
-            _hitbox.y = y;
-        }
-        
         override public function update():void {
 			var reset:Boolean = false;
 
@@ -157,8 +152,10 @@ package uk.co.zutty.evilville.entities
                 x += _move.x;
                 y += _move.y;
             }
-            
-            shiftHurtbox();
+
+            // Move the hitbox
+            _hitbox.x = x;
+            _hitbox.y = y;
             
             // Update hurt animation
             if(_hurtTick > 0) {
