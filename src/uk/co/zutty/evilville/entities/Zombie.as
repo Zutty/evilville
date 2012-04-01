@@ -135,7 +135,7 @@ package uk.co.zutty.evilville.entities
                 }
             }
 
-            // Transisiotn out of aggro
+            // Transition out of aggro
             if(_state == STATE_AGGRO && (_target == null || !_target.active || distanceFrom(_target) > AGGRO_RANGE)) {
                 _state = STATE_WANDER;
                 _target = null;
